@@ -1,91 +1,102 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Starter Kit",
+  "name": "Anam",
   "logo": {
-    "dark": "/logo/dark.svg",
-    "light": "/logo/light.svg"
+    "dark": "/logo/anam-dark.png",
+    "light": "/logo/light-3.png",
+    "href": "https://anam.ai"
   },
-  "favicon": "/favicon.svg",
-  "colors": {
-    "primary": "#0D9373",
-    "light": "#07C983",
-    "dark": "#0D9373",
-    "anchors": {
-      "from": "#0D9373",
-      "to": "#07C983"
+  "favicon": "/favicon-32x32.png",
+  "font": {
+    "headings": {
+      "family": "Roboto"
+    },
+    "body": {
+      "family": "Roboto"
     }
   },
+  "colors": {
+    "primary": "#9DBBAE",
+    "light": "#9DBBAE",
+    "dark": "#9DBBAE",
+    "background": {
+      "light": "#F4F4F4",
+      "dark": "#1A1D29"
+    }
+  },
+  "background": {
+    "style": "windows"
+  },
+  "modeToggle": {
+    "default": "light"
+  },
+  "rounded": "default",
+  "layout": "topnav",
+  "sidebar": {
+    "items": "container"
+  },
+  "codeBlock": {
+    "mode": "auto"
+  },
+  "navigation": [
+    {
+      "group": "Getting started",
+      "pages": [
+        "guides/get-started/overview",
+        "guides/get-started/quickstart",
+        "guides/get-started/development"
+      ]
+    },
+    {
+      "group": "Learn about Anam",
+      "pages": [
+        {
+          "group": "Use Cases",
+          "pages": ["guides/learn/use-cases/overview"]
+        },
+        "guides/learn/examples"
+      ]
+    },
+    {
+      "group": "SDK Reference",
+      "pages": [
+        "sdk-reference/introduction",
+        "sdk-reference/installation",
+        "sdk-reference/local-development",
+        "sdk-reference/production",
+        "sdk-reference/talk-commands",
+        "sdk-reference/audio-control",
+        "sdk-reference/configuration",
+        "sdk-reference/events"
+      ]
+    },
+    {
+      "group": "API Reference",
+      "pages": ["api-reference/introduction"]
+    }
+  ],
   "topbarLinks": [
     {
       "name": "Support",
-      "url": "mailto:hi@mintlify.com"
+      "url": "mailto:support@anam.ai"
     }
   ],
   "topbarCtaButton": {
-    "name": "Dashboard",
-    "url": "https://dashboard.mintlify.com"
+    "name": "Anam Lab",
+    "url": "https://lab.anam.ai"
   },
   "tabs": [
     {
-      "name": "API Reference",
+      "name": "User Guides",
+      "url": "guides"
+    },
+    {
+      "name": "SDK Reference",
+      "url": "sdk-reference"
+    },
+    {
+      "name": "API References",
       "url": "api-reference"
     }
-  ],
-  "anchors": [
-    {
-      "name": "Documentation",
-      "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
-    },
-    {
-      "name": "Community",
-      "icon": "slack",
-      "url": "https://mintlify.com/community"
-    },
-    {
-      "name": "Blog",
-      "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
-    }
-  ],
-  "navigation": [
-    {
-      "group": "Get Started",
-      "pages": [
-        "introduction",
-        "quickstart",
-        "development"
-      ]
-    },
-    {
-      "group": "Essentials",
-      "pages": [
-        "essentials/markdown",
-        "essentials/code",
-        "essentials/images",
-        "essentials/settings",
-        "essentials/navigation",
-        "essentials/reusable-snippets"
-      ]
-    },
-    {
-      "group": "API Documentation",
-      "pages": [
-        "api-reference/introduction"
-      ]
-    },
-    {
-      "group": "Endpoint Examples",
-      "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/delete"
-      ]
-    }
-  ],
-  "footerSocials": {
-    "x": "https://x.com/mintlify",
-    "github": "https://github.com/mintlify",
-    "linkedin": "https://linkedin.com/company/mintlify"
-  }
+  ]
 }

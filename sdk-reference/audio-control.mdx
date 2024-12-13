@@ -1,0 +1,63 @@
+---
+title: 'Audio Control'
+description: 'Control audio input and streaming behavior'
+---
+
+## Audio Input State
+
+By default, the Anam client starts capturing input audio from the user's microphone when a session starts and stops capturing when the session ends. For certain use cases, you may wish to control the input audio state programmatically.
+
+### Getting the Current State
+
+To check the current input audio state:
+
+```typescript
+const audioState: InputAudioState = anamClient.getInputAudioState();
+// { isMuted: false } or { isMuted: true }
+```
+
+### Muting Input
+
+To mute the input audio:
+
+```typescript
+const audioState: InputAudioState = anamClient.muteInputAudio();
+// { isMuted: true }
+```
+
+<Note>
+  If you mute the input audio before starting a stream, the session will start with microphone input disabled.
+</Note>
+
+### Unmuting Input
+
+To unmute the input audio:
+
+```typescript
+const audioState: InputAudioState = anamClient.unmuteInputAudio();
+// { isMuted: false }
+```
+
+## Custom Input Streams
+
+If you wish to control the microphone input audio capture yourself, you can pass your own `MediaStream` object when starting a stream:
+
+```typescript
+anamClient.streamToVideoAndAudioElements(
+  'video-element-id',
+  'audio-element-id',
+  userProvidedMediaStream
+);
+```
+
+<Note>
+  The `userProvidedMediaStream` object must be an instance of `MediaStream` and the user input audio should be the first audio track returned from the `MediaStream.getAudioTracks()` method.
+</Note>
+
+<Tip>
+  This is the default behavior if you are using `navigator.mediaDevices.getUserMedia()`.
+</Tip>
+
+<Card title="Next Steps" icon="arrow-right">
+  Learn about [Configuration Options](/sdk-reference/configuration) for your Anam sessions
+</Card> 

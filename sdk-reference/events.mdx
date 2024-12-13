@@ -1,0 +1,74 @@
+---
+title: 'Events'
+description: 'Listen to events during Anam AI sessions'
+---
+
+## Adding Event Listeners
+
+After initializing the Anam client, you can register event listeners using the `addListener` method:
+
+```typescript
+anamClient.addListener(AnamEvent.CONNECTION_ESTABLISHED, () => {
+  console.log('Connection Established');
+});
+
+anamClient.addListener(AnamEvent.MESSAGE_HISTORY_UPDATED, (messages) => {
+  console.log('Updated Messages:', messages);
+});
+```
+
+## Available Events
+
+| Event Name | Description |
+| ---------- | ----------- |
+| `CONNECTION_ESTABLISHED` | Called when the direct connection between the browser and the Anam Engine has been established |
+| `CONNECTION_CLOSED` | Called when the direct connection between the browser and the Anam Engine has been closed |
+| `VIDEO_PLAY_STARTED` | Fired when the first frames start playing during video streaming. Useful for removing loading indicators |
+| `MESSAGE_HISTORY_UPDATED` | Called with the message history transcription each time the user or persona finishes speaking |
+| `MESSAGE_STREAM_EVENT_RECEIVED` | For persona speech: Updated with each transcribed chunk as the persona speaks<br/>For user speech: Updated with complete transcription once they finish speaking |
+| `INPUT_AUDIO_STREAM_STARTED` | Called with the user's input audio stream when microphone input has been initialized |
+| `TALK_STREAM_INTERRUPTED` | Called when the user interrupts a `TalkMessageStream` by speaking. Includes the interrupted stream's `correlationId` |
+
+## Example Usage
+
+### Loading States
+
+Use connection events to manage loading states:
+
+```typescript
+anamClient.addListener(AnamEvent.CONNECTION_ESTABLISHED, () => {
+  setIsConnecting(false);
+});
+
+anamClient.addListener(AnamEvent.VIDEO_PLAY_STARTED, () => {
+  setIsLoading(false);
+});
+```
+
+### Message History
+
+Track conversation history:
+
+```typescript
+anamClient.addListener(AnamEvent.MESSAGE_HISTORY_UPDATED, (messages) => {
+  setConversationHistory(messages);
+});
+```
+
+### Real-time Transcription
+
+Monitor speech in real-time:
+
+```typescript
+anamClient.addListener(AnamEvent.MESSAGE_STREAM_EVENT_RECEIVED, (event) => {
+  if (event.type === 'persona') {
+    updatePersonaSpeech(event.text);
+  } else {
+    updateUserSpeech(event.text);
+  }
+});
+```
+
+<Card title="Next Steps" icon="arrow-right">
+  Learn about the [Anam API](/api-reference/introduction) for managing personas
+</Card> 

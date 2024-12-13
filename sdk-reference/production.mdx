@@ -1,0 +1,67 @@
+---
+title: 'Production Usage'
+description: 'Securely deploy Anam AI in production environments'
+---
+
+## Overview
+
+When deploying to production, it's important not to expose your API key publicly. Instead, you should:
+
+1. Exchange your API key for a short-lived session token on the server side
+2. Pass this token to the client
+3. Initialize the Anam SDK with the session token
+
+## Getting a Session Token
+
+From your server, make a request to get a session token:
+```typescript
+const response = await fetch('https://api.anam.ai/v1/auth/session-token', {
+method: 'GET',
+headers: {
+'Content-Type': 'application/json',
+Authorization: Bearer ${apiKey},
+},
+});
+const data = await response.json();
+const sessionToken = data.sessionToken;
+```
+
+
+## Client Initialization
+
+Once you have a session token, use the `createClient` method to initialize the Anam client:
+```typescript
+import { createClient } from '@anam-ai/js-sdk';
+const anamClient = createClient('your-session-token', {
+personaId: 'chosen-persona-id',
+});
+```
+<Note>
+  The client exposes the same methods whether initialized with an API key or session token.
+</Note>
+## Sequence Diagram
+
+Here's how a typical production session initialization flow works:
+
+<Frame>
+  <img src="/images/start-session.png" alt="Session initialization sequence diagram" />
+</Frame>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card
+    title="Talk Commands"
+    icon="message"
+    href="/sdk-reference/talk-commands"
+  >
+    Learn how to control persona output using talk commands
+  </Card>
+  <Card
+    title="Audio Control"
+    icon="microphone"
+    href="/sdk-reference/audio-control"
+  >
+    Control audio input and streaming behavior
+  </Card>
+</CardGroup>

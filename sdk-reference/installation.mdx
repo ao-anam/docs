@@ -1,0 +1,31 @@
+---
+title: 'Installation'
+description: 'Install and setup the Anam AI JavaScript SDK'
+---
+
+## Installation
+
+Install the SDK in your project using npm: 
+
+```bash
+npm install @anam-ai/sdk
+```
+
+## Basic Usage
+
+The quickest way to start using the SDK is with a local development setup:
+```typescript
+import { unsafe_createClientWithApiKey } from '@anam-ai/js-sdk';
+const anamClient = unsafe_createClientWithApiKey('your-api-key', {
+personaId: 'chosen-persona-id',
+});
+// Start streaming to video and audio elements
+await anamClient.streamToVideoAndAudioElements(
+'video-element-id',
+'audio-element-id'
+);
+```
+
+<Warning>
+  The `unsafe_createClientWithApiKey` method is not recommended for production use as it exposes your API key. See the [Production Usage](/sdk/production) guide for secure implementation.
+</Warning>

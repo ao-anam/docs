@@ -1,0 +1,66 @@
+---
+title: 'Talk Commands'
+description: 'Control persona output using talk commands'
+---
+
+## Basic Usage
+
+Sometimes during a persona session, you may wish to force a response from the persona. For example, when the user interacts with an element on the page or when you have disabled the Anam LLM to use your own. To do this, use the `talk` method: 
+
+```typescript
+await anamClient.talk('Hello, how are you?');
+```
+
+This will force the persona to respond with the given text.
+
+
+## Streaming Talk Input
+
+For more advanced use cases, you can stream messages to the persona in multiple chunks. This is particularly useful when streaming output from a custom LLM to reduce latency.
+
+```typescript
+const talkMessageStream = anamClient.createTalkMessageStream();
+const chunks = ['He', 'l', 'lo', ', how are you?'];
+for (const chunk of chunks) {
+if (talkMessageStream.isActive()) {
+talkMessageStream.streamMessageChunk(
+chunk,
+chunk === chunks[chunks.length - 1]
+);
+}
+}
+```
+<Warning>
+  One talkMessageStream represents one "turn" in the conversation. Once that turn is over, the object can no longer be used and you must create a new `TalkMessageStream`.
+</Warning>
+
+## End of Speech and Interruptions
+
+A "turn" can end in two ways:
+
+1. **End of speech**: When `streamMessageChunk` is called with `endOfSpeech: true` or `endMessage()` is called
+2. **User interruption**: When the user speaks during the stream, triggering an `AnamEvent.TALK_STREAM_INTERRUPTED` event
+
+In both cases, the `TalkMessageStream` object is closed and no longer usable. You can check if a stream is still active using:
+```typescript
+if (talkMessageStream.isActive()) {
+// Stream is still active
+}
+```
+
+## Correlation IDs
+
+For tracking purposes, you can attach a correlation ID to your talk streams:
+```typescript
+talkMessageStream.streamMessageChunk(chunk, isLastChunk, {
+correlationId: 'unique-id-123'
+});
+```
+
+<Note>
+  The `correlationId` should be unique for every `TalkMessageStream` instance. When a talk stream is interrupted, this ID will be included in the `AnamEvent.TALK_STREAM_INTERRUPTED` event.
+</Note>
+
+<Card title="Next Steps" icon="arrow-right">
+  Learn how to control [Audio Input](/sdk-reference/audio-control) in your Anam sessions
+</Card>

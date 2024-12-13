@@ -1,0 +1,79 @@
+---
+title: 'Configuration'
+description: 'Configure your Anam AI sessions'
+---
+
+## Client Configuration
+
+When initializing the Anam client, you can provide various configuration options to customize its behavior.
+
+### Disabling Brains
+
+You can turn off the Anam LLM by setting the `disableBrains` option to `true`. When disabled, the persona will only respond to `talk` commands and won't process voice input:
+
+```typescript
+import { createClient } from '@anam-ai/js-sdk';
+
+const anamClient = createClient('your-session-token', {
+  personaId: 'chosen-persona-id',
+  disableBrains: true
+});
+```
+
+### Disabling Filler Phrases
+
+To turn off the use of filler phrases by the persona:
+
+```typescript
+const anamClient = createClient('your-session-token', {
+  personaId: 'chosen-persona-id',
+  disableFillerPhrases: true
+});
+```
+
+<Note>
+  The option `disableFillerPhrases` has no effect if `disableBrains` is set to `true`.
+</Note>
+
+## Updating Configuration
+
+You can update the persona configuration after initialization using `setPersonaConfig`:
+
+```typescript
+anamClient.setPersonaConfig({
+  personaId: 'new-persona-id',
+  disableFillerPhrases: true
+});
+```
+
+To check the current configuration:
+
+```typescript
+const config = anamClient.getPersonaConfig();
+```
+
+## Session Options
+
+Session options allow you to fine-tune the behavior of your Anam sessions. These can be passed during client initialization:
+
+```typescript
+const anamClient = createClient(
+  'your-session-token',
+  {
+    personaId: 'chosen-persona-id'
+  },
+  {
+    voiceDetection: { endOfSpeechSensitivity: 0.7 }
+  }
+);
+```
+
+### Available Options
+
+| Option | Sub-option | Type | Description | Status |
+| ------ | ---------- | ---- | ----------- | ------ |
+| `voiceDetection` | `endOfSpeechSensitivity` | number | Adjusts the sensitivity of the end-of-speech detection | Coming soon |
+
+<Card title="Next Steps" icon="arrow-right">
+  Learn about [Events](/sdk-reference/events) you can listen to during Anam sessions
+</Card> 
