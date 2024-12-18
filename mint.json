@@ -28,7 +28,7 @@
     "style": "windows"
   },
   "modeToggle": {
-    "default": "light"
+    "default": "dark"
   },
   "rounded": "default",
   "layout": "topnav",
@@ -40,29 +40,50 @@
   },
   "navigation": [
     {
-      "group": "Getting started",
+      "group": "Welcome",
+      "pages": ["guides/welcome/overview"]
+    },
+    {
+      "group": "Getting Started",
       "pages": [
-        "guides/get-started/overview",
+        "guides/get-started/introduction",
+        "guides/get-started/api-key",
         "guides/get-started/quickstart",
-        "guides/get-started/development"
+        "guides/get-started/production"
       ]
     },
     {
-      "group": "Learn about Anam",
+      "group": "Personas",
       "pages": [
+        "guides/personas/introduction",
+        "guides/personas/default-personas",
         {
-          "group": "Use Cases",
-          "pages": ["guides/learn/use-cases/overview"]
+          "group": "Create your own personas",
+          "pages": [
+            "guides/personas/create-your-own/overview",
+            "guides/personas/create-your-own/create-your-own-lab",
+            "guides/personas/create-your-own/create-your-own-api"
+          ]
         },
-        "guides/learn/examples"
+        "guides/personas/custom-brains"
       ]
+    },
+    {
+      "group": "Build with Anam",
+      "pages": [
+        "guides/build-with-anam/creating-smarter-personas",
+        "guides/build-with-anam/examples"
+      ]
+    },
+    {
+      "group": "Knowledge Base",
+      "pages": ["guides/faq/faq"]
     },
     {
       "group": "SDK Reference",
       "pages": [
         "sdk-reference/introduction",
-        "sdk-reference/installation",
-        "sdk-reference/local-development",
+        "sdk-reference/basic-usage",
         "sdk-reference/production",
         "sdk-reference/talk-commands",
         "sdk-reference/audio-control",
@@ -72,7 +93,30 @@
     },
     {
       "group": "API Reference",
-      "pages": ["api-reference/introduction"]
+      "pages": [
+        "api-reference/introduction",
+        {
+          "group": "Endpoints",
+          "pages": [
+            {
+              "group": "Auth",
+              "pages": ["api-reference/auth/get-v1authsession-token"]
+            },
+            {
+              "group": "Personas",
+              "pages": [
+                "api-reference/persona/get-v1personaspresets",
+                "api-reference/persona/get-v1personaspresets-1",
+                "api-reference/persona/get-v1personas",
+                "api-reference/persona/get-v1personas-1",
+                "api-reference/persona/post-v1personas",
+                "api-reference/persona/put-v1personas",
+                "api-reference/persona/delete-v1personas"
+              ]
+            }
+          ]
+        }
+      ]
     }
   ],
   "topbarLinks": [
@@ -95,8 +139,15 @@
       "url": "sdk-reference"
     },
     {
-      "name": "API References",
+      "name": "API Reference",
       "url": "api-reference"
     }
-  ]
+  ],
+  "openapi": "https://api.anam.ai/api-json",
+  "api": {
+    "baseUrl": "https://api.anam.ai",
+    "playground": {
+      "mode": "show"
+    }
+  }
 }

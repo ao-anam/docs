@@ -1,6 +1,6 @@
 ---
-title: 'Configuration'
-description: 'Configure your Anam AI sessions'
+title: 'Session Configuration'
+description: 'Additional configuration options for the Anam client'
 ---
 
 ## Client Configuration
@@ -12,13 +12,14 @@ When initializing the Anam client, you can provide various configuration options
 You can turn off the Anam LLM by setting the `disableBrains` option to `true`. When disabled, the persona will only respond to `talk` commands and won't process voice input:
 
 ```typescript
-import { createClient } from '@anam-ai/js-sdk';
-
 const anamClient = createClient('your-session-token', {
   personaId: 'chosen-persona-id',
   disableBrains: true
 });
 ```
+<Note>
+  To learn more about how to use your own custom intelligence, see our [Custom Brains](/guides/personas/custom-brains) guide.
+</Note>
 
 ### Disabling Filler Phrases
 
@@ -59,9 +60,7 @@ Session options allow you to fine-tune the behavior of your Anam sessions. These
 ```typescript
 const anamClient = createClient(
   'your-session-token',
-  {
-    personaId: 'chosen-persona-id'
-  },
+  { personaId: 'chosen-persona-id' },
   {
     voiceDetection: { endOfSpeechSensitivity: 0.7 }
   }
@@ -74,6 +73,7 @@ const anamClient = createClient(
 | ------ | ---------- | ---- | ----------- | ------ |
 | `voiceDetection` | `endOfSpeechSensitivity` | number | Adjusts the sensitivity of the end-of-speech detection | Coming soon |
 
-<Card title="Next Steps" icon="arrow-right">
-  Learn about [Events](/sdk-reference/events) you can listen to during Anam sessions
+## Next Steps
+<Card title="Listening for Events" icon="bell" href="/sdk-reference/events">
+  Session events let you respond to changes in the session state. Learn how you can listen for events and trigger custom logic.
 </Card> 

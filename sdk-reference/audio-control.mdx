@@ -16,7 +16,7 @@ const audioState: InputAudioState = anamClient.getInputAudioState();
 // { isMuted: false } or { isMuted: true }
 ```
 
-### Muting Input
+### Mute Audio Input
 
 To mute the input audio:
 
@@ -29,7 +29,7 @@ const audioState: InputAudioState = anamClient.muteInputAudio();
   If you mute the input audio before starting a stream, the session will start with microphone input disabled.
 </Note>
 
-### Unmuting Input
+### Unmute Audio Input
 
 To unmute the input audio:
 
@@ -58,6 +58,7 @@ anamClient.streamToVideoAndAudioElements(
   This is the default behavior if you are using `navigator.mediaDevices.getUserMedia()`.
 </Tip>
 
-<Card title="Next Steps" icon="arrow-right">
-  Learn about [Configuration Options](/sdk-reference/configuration) for your Anam sessions
-</Card> 
+## Next Steps
+<Card title="Session Configuration" icon="gear" href="/sdk-reference/configuration">
+  Understand additional configuration options for your Anam sessions
+</Card>

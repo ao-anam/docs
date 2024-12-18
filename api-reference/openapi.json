@@ -1,194 +1,402 @@
 {
-  "openapi": "3.0.1",
-  "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-    "license": {
-      "name": "MIT"
-    },
-    "version": "1.0.0"
-  },
-  "servers": [
-    {
-      "url": "http://sandbox.mintlify.com"
-    }
-  ],
-  "security": [
-    {
-      "bearerAuth": []
-    }
-  ],
+  "openapi": "3.0.0",
   "paths": {
-    "/plants": {
+    "/v1/personas/presets": {
       "get": {
-        "description": "Returns all plants from the system that the user has access to",
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
+        "operationId": "getAllPersonaPresets",
+        "parameters": [],
         "responses": {
           "200": {
-            "description": "Plant response",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Plant"
+                    "$ref": "#/components/schemas/PersonaPresetResponseDto"
                   }
                 }
               }
             }
           },
-          "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
-        "requestBody": {
-          "description": "Plant to add to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          },
-          "required": true
+          "401": { "description": "" }
         },
-        "responses": {
-          "200": {
-            "description": "plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Plant"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
+        "tags": ["Persona"],
+        "security": [{ "bearer": [] }]
       }
     },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
+    "/v1/personas/presets/{name}": {
+      "get": {
+        "operationId": "getPersonaPresetByName",
+        "parameters": [
+          {
+            "name": "name",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonaPresetResponseDto"
+                }
+              }
+            }
+          },
+          "401": { "description": "" }
+        },
+        "tags": ["Persona"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/v1/personas": {
+      "post": {
+        "operationId": "createPersona",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreatePersonaDto" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonaResponseFullDto"
+                }
+              }
+            }
+          },
+          "401": { "description": "" }
+        },
+        "tags": ["Persona"],
+        "security": [{ "bearer": [] }]
+      },
+      "get": {
+        "operationId": "getAllPersonas",
+        "parameters": [
+          {
+            "required": false,
+            "name": "page",
+            "in": "query",
+            "schema": { "default": 1, "type": "number" }
+          },
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "schema": { "type": "number" }
+          },
+          {
+            "required": false,
+            "name": "perPage",
+            "in": "query",
+            "schema": { "default": 10, "type": "number" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "PaginatedResponseOfPersonaResponseShortDto",
+                  "allOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/PersonaResponseShortDto"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "properties": {
+                        "meta": {
+                          "type": "object",
+                          "properties": {
+                            "total": { "type": "number" },
+                            "lastPage": { "type": "number" },
+                            "currentPage": { "type": "number" },
+                            "perPage": { "type": "number" },
+                            "prev": { "type": "number" },
+                            "next": { "type": "number" }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": { "description": "" }
+        },
+        "tags": ["Persona"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/v1/personas/{id}": {
+      "get": {
+        "operationId": "getPersonaById",
         "parameters": [
           {
             "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
             "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+            "in": "path",
+            "schema": { "type": "string" }
           }
         ],
         "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
-          },
-          "400": {
-            "description": "unexpected error",
+          "200": {
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/PersonaResponseFullDto"
                 }
               }
             }
+          },
+          "401": { "description": "" }
+        },
+        "tags": ["Persona"],
+        "security": [{ "bearer": [] }]
+      },
+      "put": {
+        "operationId": "updatePersona",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
           }
-        }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdatePersonaDto" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonaResponseFullDto"
+                }
+              }
+            }
+          },
+          "401": { "description": "" }
+        },
+        "tags": ["Persona"],
+        "security": [{ "bearer": [] }]
+      },
+      "delete": {
+        "operationId": "deletePersona",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "" },
+          "401": { "description": "" }
+        },
+        "tags": ["Persona"],
+        "security": [{ "bearer": [] }]
+      }
+    },
+    "/v1/auth/session-token": {
+      "get": {
+        "operationId": "getSessionToken",
+        "parameters": [],
+        "responses": {
+          "200": { "description": "" },
+          "401": { "description": "" }
+        },
+        "tags": ["Auth"],
+        "security": [{ "bearer": [] }]
       }
     }
   },
+  "info": {
+    "title": "Anam API",
+    "description": "Public API for Anam AI",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
   "components": {
+    "securitySchemes": {
+      "bearer": { "scheme": "bearer", "bearerFormat": "JWT", "type": "http" }
+    },
     "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
+      "PersonaPresetResponseDto": {
+        "type": "object",
+        "properties": { "name": { "type": "string" } },
+        "required": ["name"]
+      },
+      "CreateBrainDto": {
+        "type": "object",
+        "properties": {
+          "systemPrompt": {
+            "type": "string",
+            "description": "The system prompt to use for LLM interactions.",
+            "example": "You are role-playing as a text chatbot hotel receptionist at The Sunset Hotel. Your name is Eva. Start with 'Hi,\n    this is The Sunset Hotel reception, how may I help you?' Be mindful of the hotel's availability: single and double rooms\n    are still available all next week, except Tuesday. Dogs are allowed. There's a restaurant and bar in the lobby. If\n    communication breaks down, ask if they want to speak to a human. Finish every response with a question to drive the\n     conversation. Do not repeat yourself."
+          },
+          "personality": {
+            "type": "string",
+            "description": "Personality is a short description of the persona role-play. This improves the quality of the choice of filler phrases.",
+            "example": "You are role-playing as a text chatbot hotel receptionist at The Sunset Hotel. Your name is Eva."
+          },
+          "fillerPhrases": {
+            "description": "Filler phrases can be used to improve the response time of the persona. When enabled via the SDK the persona will first respond with a filler phrase before the actual response. Selection of filler phrases is decided by calling an LLM with the available list + personality.",
+            "example": [
+              "Okay, got it.",
+              "I see.",
+              "Let me check that for you."
+            ],
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "required": ["systemPrompt", "personality", "fillerPhrases"]
+      },
+      "CreatePersonaDto": {
         "type": "object",
         "properties": {
           "name": {
-            "description": "The name of the plant",
-            "type": "string"
+            "type": "string",
+            "description": "The name for the persona",
+            "example": "Eva"
           },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
-          }
-        }
-      },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
+          "description": {
+            "type": "string",
+            "description": "The description for the persona. This is an optional descriptor and is not used as part of the LLM prompt generation.",
+            "example": "Eva is the virtual receptionist of the fictional Sunset Hotel."
           },
-          {
-            "required": [
-              "id"
-            ],
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
-              }
-            }
+          "personaPreset": {
+            "type": "string",
+            "description": "The persona preset defines the face and voice of the persona from our list of available presets. Currently, the only available preset is \"eva\".",
+            "example": "eva"
+          },
+          "brain": {
+            "description": "Configuration for the persona LLM 'brains'.",
+            "allOf": [{ "$ref": "#/components/schemas/CreateBrainDto" }]
           }
-        ]
+        },
+        "required": ["name", "personaPreset", "brain"]
       },
-      "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
+      "BrainResponseDto": {
         "type": "object",
         "properties": {
-          "error": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "message": {
-            "type": "string"
+          "id": { "type": "string" },
+          "personality": { "type": "string" },
+          "systemPrompt": { "type": "string" },
+          "fillerPhrases": { "type": "array", "items": { "type": "string" } },
+          "createdAt": { "format": "date-time", "type": "string" },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
           }
+        },
+        "required": [
+          "id",
+          "personality",
+          "systemPrompt",
+          "fillerPhrases",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "PersonaResponseFullDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "personaPreset": { "type": "string" },
+          "brain": { "$ref": "#/components/schemas/BrainResponseDto" },
+          "isDefaultPersona": { "type": "boolean" },
+          "createdAt": { "format": "date-time", "type": "string" },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "personaPreset",
+          "brain",
+          "isDefaultPersona",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "PersonaResponseShortDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "personaPreset": { "type": "string" },
+          "isDefaultPersona": { "type": "boolean" },
+          "createdAt": { "format": "date-time", "type": "string" },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "personaPreset",
+          "isDefaultPersona",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "UpdateBrainDto": {
+        "type": "object",
+        "properties": {
+          "systemPrompt": { "type": "string" },
+          "personality": { "type": "string" },
+          "fillerPhrases": { "type": "array", "items": { "type": "string" } }
         }
-      }
-    },
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer"
+      },
+      "UpdatePersonaDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "personaPreset": { "type": "string" },
+          "brain": { "$ref": "#/components/schemas/UpdateBrainDto" }
+        }
       }
     }
   }

@@ -1,13 +1,7 @@
 ---
-title: 'Quickstart'
-description: 'Start integrating your personas in under 5 minutes'
+title: 'Basic Usage'
+description: 'Install and setup the Anam AI JavaScript SDK'
 ---
-
-## Prerequisites
-
-### Anam API key
-
-Your first API key will be created for you when you create an account. If you don't have your API key or if you need to create a new one, see our [API key management guide](/guides/get-started/api-key-management).
 
 ## Installation
 
@@ -17,7 +11,7 @@ Install the SDK in your project using npm:
 npm install @anam-ai/sdk
 ```
 
-## Basic Usage
+## Local Development
 
 The quickest way to start using the SDK is with a local development setup:
 <Warning>
@@ -59,9 +53,16 @@ For this example we would include the following in our HTML:
   The `playsinline` attribute prevents the video from being played in fullscreen mode on mobile devices.
 </Note>
 
+## Stopping a Stream
+
+To stop an active session, use the `stopStreaming` method. This will end the current session and release the audio and video elements.
+
+```typescript
+await anamClient.stopStreaming();
+```
+
+
 ## Next Steps
 <Card icon="industry" title="Usage in Production" href="/guides/get-started/production">
 Before taking the next steps to release your persona to real users, learn the important considerations for using personas in production.
 </Card>
-
-

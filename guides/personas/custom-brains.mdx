@@ -1,0 +1,120 @@
+---
+title: 'Using Custom Brains'
+description: 'Implement custom intelligence for your personas'
+---
+
+## Overview
+
+Our of the box Anam provides an LLM to act as the brains of your personas. This is great for most use cases and helps produce the lowest possible latency when having conversations. However, you may already have your own LLM or other intelligence that you want to integrate with your persona. Anam allows you to do this by providing a way to disable the default brains and use the SDK's `talk()` method to give speech instructions directly to the persona.
+
+## The Process
+Using your own custom brains requires three steps to configure:
+1. Disable the default Anam brains.
+2. Listen for updates to the conversation history to know when you need to respond.
+3. Use the `talk` method to instruct the persona to speak your custom response.
+
+## 1. Disabling the Default Brain
+
+You can turn off the Anam LLM by using the `disableBrains` configuration option when initialising the Anam client. When disabled, the persona will simply listen to user input and only respond to explicit `talk` commands.
+
+```typescript
+import { createClient } from '@anam-ai/js-sdk';
+
+const anamClient = createClient('your-session-token', {
+  personaId: 'your-persona-id',
+  disableBrains: true
+});
+```
+
+## 2. Listening for Conversation History
+In order to know when to respond, you'll need to listen for updates to the conversation. You can do this by adding a listener for one of the following events.
+| Event Name | Description |
+| ---------- | ----------- |
+| `MESSAGE_HISTORY_UPDATED` | Called with the message history transcription each time the user or persona finishes speaking |
+| `MESSAGE_STREAM_EVENT_RECEIVED` | **For persona speech:** Updated with each transcribed chunk as the persona speaks<br/>**For user speech:** Updated with complete transcription once they finish speaking |
+
+```typescript
+anamClient.addListener(AnamEvent.MESSAGE_HISTORY_UPDATED, async (messageHistory: Message[]) => {
+  if (messageHistory.length > 0) {
+      const latestMessage = messageHistory[messageHistory.length - 1];
+      // only respond to user messages
+      if (latestMessage.role === 'user') {
+        // get the response from your custom brain
+        const response = await getCustomBrainResponse(messageHistory);
+        // instruct the persona to speak the response
+        anamClient.talk(response);
+      }
+    }
+});
+```
+<Note>
+For more information about session events see the [Events](/sdk-reference/events) guide.
+</Note>
+
+## 3. Using Talk Commands
+
+When using your own brain implementation, you'll need to control the persona's responses using the `talk` method. The most basic method is to pass the full string of your response to a single `talk` call.
+
+```typescript
+anamClient.talk('Content to say');
+```
+
+<Note>
+Even if you're using Anam's default brains you may still wish to respond to user interaction events such as clicking on an element with your application or viewing a specific part of a web page. The `talk` command is a great way to do this.
+</Note>
+
+## Streaming Responses
+
+For reduced latency when using custom LLMs, you can stream responses in chunks using the `TalkMessageStream`:
+
+```typescript
+const talkMessageStream = anamClient.createTalkMessageStream();
+const chunks = ['He', 'l', 'lo', ', how are you?'];
+
+for (const chunk of chunks) {
+  if (talkMessageStream.isActive()) {
+    talkMessageStream.streamMessageChunk(
+      chunk,
+      chunk === chunks[chunks.length - 1]
+    );
+  }
+}
+```
+
+### Important Considerations
+
+1. One `TalkMessageStream` represents one conversation turn
+2. A turn can end in two ways:
+   - End of speech: When `streamMessageChunk` is called with `endOfSpeech` set to `true` or the `endMessage()` method is called.
+   - User interruption: When the user speaks during streaming.
+3. Once a turn ends, the `TalkMessageStream` object is closed and cannot be reused.
+4. Create a new `TalkMessageStream` for each new turn.
+
+### Correlation IDs
+
+For tracking purposes, you can attach a correlation ID to your talk streams by passing the optional `correlationId` parameter to the `createTalkMessageStream` method:
+```typescript
+const talkMessageStream = anamClient.createTalkMessageStream("unique-id-123");
+```
+<Note>
+  The `correlationId` should be unique for every `TalkMessageStream` instance. When a talk stream is interrupted, this ID will be included in the `AnamEvent.TALK_STREAM_INTERRUPTED` event.
+</Note>
+## Handling Interrupts
+
+When streaming talk commands your users may interrupt the persona and produce new speech events that you need to respond with. You can listen for interrupt events when implementing your own brain which can let you know when you no longer need to continue using the current talk stream.
+
+```typescript
+anamClient.addListener(AnamEvent.TALK_STREAM_INTERRUPTED, (event) => {
+  console.log('Stream interrupted, correlation ID:', event.correlationId);
+});
+```
+
+## Next Steps
+<CardGroup cols={2}>
+<Card title="Example Projects" icon="github" href="/guides/build-with-anam/examples">
+Explore example projects to help you get started with common use cases.
+</Card>
+<Card title="SDK reference" icon="js" href="/sdk-reference">
+Explore the SDK reference to learn more about the available methods and events.
+</Card>
+</CardGroup>

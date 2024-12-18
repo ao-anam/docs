@@ -1,0 +1,79 @@
+---
+title: 'Create your own persona using the Anam API'
+sidebarTitle: 'With the Anam API'
+description: 'Learn how to create and customize your own Anam persona'
+---
+
+## Creating Custom Personas with the API
+
+You can create your own custom personas using the Anam API's `/v1/personas` endpoint. Custom personas allow you to define specific characteristics and behaviors for your use case.
+
+## Required Parameters
+
+### Persona Parameters
+| Parameter | Description |
+|-----------|-------------|
+| `name` | The name for the persona. Used as a human-readable identifier. |
+| `description` | A brief description of the persona's role (optional). Not used by the LLM. |
+| `personaPreset` | Defines the face and voice of the persona from available presets. |
+| `brain` | Configuration for the persona's LLM 'brain'. |
+
+### Brain Parameters
+| Parameter | Description |
+|-----------|-------------|
+| `systemPrompt` | The prompt used for initializing LLM interactions. |
+| `personality` | A short description of the persona's character traits. |
+| `fillerPhrases` | Phrases used to enhance interaction response times. |
+
+## Implementation Example
+
+Here's how to create a custom persona using the API:
+
+```bash
+curl -X POST "https://api.anam.ai/v1/personas" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer your-api-key" \
+  -d '{
+    "name": "Leo",
+    "description": "Leo is the virtual receptionist of the Sunset Hotel.",
+    "personaPreset": "leo",
+    "brain": {
+      "systemPrompt": "You are Leo, a virtual receptionist...",
+      "personality": "You are role-playing as a text chatbot hotel receptionist at The Sunset Hotel. Your name is Leo.",
+      "fillerPhrases": ["One moment please.", "Let me check that for you."]
+    }
+  }'
+```
+
+The API will respond with the created persona's details, including its ID:
+
+```json
+{
+  "id": "new_persona_id",
+  "name": "Leo",
+  "description": "Leo is the virtual receptionist of the Sunset Hotel.",
+  "personaPreset": "leo",
+  "brain": {
+    "id": "new_brain_id",
+    "personality": "helpful and friendly",
+    "systemPrompt": "You are Leo, a virtual receptionist...",
+    "fillerPhrases": ["One moment please...", "Let me check that for you..."],
+    "createdAt": "2021-01-01T00:00:00Z",
+    "updatedAt": "2021-01-02T00:00:00Z"
+  }
+}
+```
+
+## Using Your Custom Persona
+
+Once created, you can use your custom persona with the SDK:
+
+```typescript
+const anamClient = createClient('your-session-token', {
+  personaId: 'your-custom-persona-id'
+});
+```
+
+<Warning>
+  For production use, always use the secure client creation method with session tokens instead of API keys.
+</Warning>

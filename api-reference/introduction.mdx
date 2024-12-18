@@ -1,33 +1,17 @@
 ---
 title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
-
-## Welcome
-
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
-
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+You can interact with the Anam API through HTTP requests using your Anam API key. If you don't already have your API key, or if you need to create a new one, see [Managing API keys](/guides/get-started/api-key).
 
 ## Authentication
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+All requests to the Anam API must be authenticated using your API key. Each request should include an `Authorization` header with the value `Bearer <your_api_key>`.
 
-```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
+For example, to authenticate a request to the `GET /v1/personas` endpoint using your API key `1234567890` you would include the following header:
+
+```bash
+curl -X GET "https://api.anam.com/v1/personas" \
+  -H "Authorization: Bearer 1234567890" \
+  -H "Content-Type: application/json"
 ```

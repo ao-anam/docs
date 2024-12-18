@@ -13,6 +13,9 @@ await anamClient.talk('Hello, how are you?');
 
 This will force the persona to respond with the given text.
 
+<Note>
+  To learn more about how to use the `talk` method to enable your own custom intelligence, see our [Custom Brains](/guides/personas/custom-brains) guide.
+</Note>
 
 ## Streaming Talk Input
 
@@ -20,47 +23,49 @@ For more advanced use cases, you can stream messages to the persona in multiple 
 
 ```typescript
 const talkMessageStream = anamClient.createTalkMessageStream();
+
 const chunks = ['He', 'l', 'lo', ', how are you?'];
+
 for (const chunk of chunks) {
-if (talkMessageStream.isActive()) {
-talkMessageStream.streamMessageChunk(
-chunk,
-chunk === chunks[chunks.length - 1]
-);
-}
+  if (talkMessageStream.isActive()) {
+    talkMessageStream.streamMessageChunk(
+      chunk,
+      chunk === chunks[chunks.length - 1]
+    );
+  }
 }
 ```
-<Warning>
-  One talkMessageStream represents one "turn" in the conversation. Once that turn is over, the object can no longer be used and you must create a new `TalkMessageStream`.
-</Warning>
+<Note>
+  One talkMessageStream represents one "turn" in the conversation. Once that turn is over, the stream can no longer be used and you must create a new `TalkMessageStream`.
+</Note>
 
-## End of Speech and Interruptions
+### End of Speech and Interruptions
 
-A "turn" can end in two ways:
+A conversation "turn" can end in one of two ways:
 
-1. **End of speech**: When `streamMessageChunk` is called with `endOfSpeech: true` or `endMessage()` is called
+1. **End of speech**: When `streamMessageChunk` is called with `endOfSpeech: true` or the `endMessage()` method is called
 2. **User interruption**: When the user speaks during the stream, triggering an `AnamEvent.TALK_STREAM_INTERRUPTED` event
 
 In both cases, the `TalkMessageStream` object is closed and no longer usable. You can check if a stream is still active using:
 ```typescript
 if (talkMessageStream.isActive()) {
-// Stream is still active
+  // Stream is still active
 }
 ```
 
 ## Correlation IDs
 
-For tracking purposes, you can attach a correlation ID to your talk streams:
+For tracking purposes, you can attach a correlation ID to your talk streams by passing the optional `correlationId` parameter to the `createTalkMessageStream` method:
 ```typescript
-talkMessageStream.streamMessageChunk(chunk, isLastChunk, {
-correlationId: 'unique-id-123'
-});
+const talkMessageStream = anamClient.createTalkMessageStream("unique-id-123");
 ```
 
 <Note>
   The `correlationId` should be unique for every `TalkMessageStream` instance. When a talk stream is interrupted, this ID will be included in the `AnamEvent.TALK_STREAM_INTERRUPTED` event.
 </Note>
 
-<Card title="Next Steps" icon="arrow-right">
-  Learn how to control [Audio Input](/sdk-reference/audio-control) in your Anam sessions
+## Next Steps
+
+<Card title="Audio Control" icon="volume" href="/sdk-reference/audio-control">
+  Learn how to control Audio Input in your Anam sessions
 </Card>
